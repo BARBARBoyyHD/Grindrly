@@ -1,7 +1,6 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import supabase from '../../supabase/supabase'
-import { BASE_URL } from "../../config/BASE_URL";
+import supabase from '../../supabase/supabase';
 
 export default function AuthUI() {
   return (
@@ -9,7 +8,7 @@ export default function AuthUI() {
         <div className="w-full max-w-sm p-6 bg-white rounded-2xl shadow-lg">
           <Auth
             supabaseClient={supabase}
-            redirectTo={`${BASE_URL}/waitlist`}
+            redirectTo={`${window.location.origin}/waitlist`}
             providers={["google"]}
             appearance={{
               theme: ThemeSupa,
