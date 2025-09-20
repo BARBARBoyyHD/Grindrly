@@ -3,8 +3,11 @@ import { AiFillTikTok } from "react-icons/ai";
 import { FaLinkedin } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/grindrlylogo.svg";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
+import { useEffect } from "react";
 
 export default function WaitlistComponents() {
+  const user = useCurrentUser();
   const navigate = useNavigate();
 
   return (
@@ -28,7 +31,14 @@ export default function WaitlistComponents() {
       >
         🎉 Thanks for joining <span className="text-[#FE9A5D]">Grindrly</span>!
       </motion.h1>
-
+       <motion.p
+        className="text-white text-lg md:text-xl mb-8 px-2 max-w-2xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: "easeOut", delay: 0.4 }}
+      >
+       {user?.user_metadata?.full_name}
+      </motion.p>
       {/* Subtext */}
       <motion.p
         className="text-white text-lg md:text-xl mb-8 px-2 max-w-2xl"

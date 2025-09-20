@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "react-time-picker/dist/TimePicker.css";
+@import "react-clock/dist/Clock.css"; 
+
 
 *{
     scroll-behavior: smooth;
@@ -13,3 +16,29 @@
 ::-webkit-scrollbar-thumb{
   background: linear-gradient(to bottom, rgb(240, 105, 15),rgb(235, 151, 95))
 }
+
+/* wrapper box */
+.custom-timepicker .react-time-picker__wrapper {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  color: white;
+}
+
+/* input disabled look */
+.custom-timepicker .react-time-picker__inputGroup__input {
+  pointer-events: none; /* 👈 disables typing */
+  background: transparent;
+  color: white;
+  border: none;
+  text-align: center;
+}
+
+/* dropdown options styling */
+.custom-timepicker .react-time-picker__clock {
+  background: rgba(20, 20, 20, 0.9);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
