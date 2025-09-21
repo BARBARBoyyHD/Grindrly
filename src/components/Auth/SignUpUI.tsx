@@ -1,12 +1,13 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import supabase from '../../supabase/supabase';
-export default function AuthUI() {
+export default function SignUpUI() {
   return (
     <div className="flex justify-center items-center h-screen bg-[#232224]">
         <div className="w-full max-w-sm p-6 bg-white rounded-2xl shadow-lg">
           <Auth
             supabaseClient={supabase}
+            view="sign_up"
             redirectTo={`${window.location.origin}/waitlist`}
             providers={["google"]}
             appearance={{

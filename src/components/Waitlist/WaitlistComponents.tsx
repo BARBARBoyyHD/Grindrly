@@ -3,12 +3,14 @@ import { AiFillTikTok } from "react-icons/ai";
 import { FaLinkedin } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/grindrlylogo.svg";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
 
 export default function WaitlistComponents() {
+  const user = useCurrentUser();
   const navigate = useNavigate();
 
   return (
-    <section className="mt-[70px] h-screen flex items-center flex-col px-4 w-full justify-center">
+    <section className="mt-[70px] min-h-screen flex items-center flex-col px-4 w-full justify-center">
       {/* Logo */}
       <motion.img
         src={Logo}
@@ -28,7 +30,14 @@ export default function WaitlistComponents() {
       >
         🎉 Thanks for joining <span className="text-[#FE9A5D]">Grindrly</span>!
       </motion.h1>
-
+      <motion.p
+        className="text-white text-lg md:text-xl mb-8 px-2 max-w-2xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: "easeOut", delay: 0.4 }}
+      >
+        {user?.user_metadata?.full_name}
+      </motion.p>
       {/* Subtext */}
       <motion.p
         className="text-white text-lg md:text-xl mb-8 px-2 max-w-2xl"
@@ -39,6 +48,23 @@ export default function WaitlistComponents() {
         You’re officially on the waitlist and will be notified by email as soon
         as we launch. Get ready to track your daily wins, crush your goals, and
         level up your routine. We can’t wait to have you on board!
+      </motion.p>
+
+      <motion.p
+        className="text-white text-lg md:text-xl mb-8 px-2 max-w-2xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: "easeOut", delay: 0.4 }}
+      >
+        Update : Todo List is now available
+      </motion.p>
+      <motion.p
+        className="text-white text-lg md:text-xl mb-8 px-2 max-w-2xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: "easeOut", delay: 0.4 }}
+      >
+        Upcoming : Workout Tracker & Mood will available soon
       </motion.p>
 
       {/* Buttons */}
@@ -56,6 +82,14 @@ export default function WaitlistComponents() {
           onClick={() => navigate("/")}
         >
           ← Home
+        </motion.button>
+        <motion.button
+          className="bg-[#FE9A5D] text-white px-6 py-3 rounded-md hover:bg-gray-600 transition-all duration-200"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => navigate("/dashboard")}
+        >
+          ← Now you can list your todo
         </motion.button>
 
         {/* Check Updates Button */}
