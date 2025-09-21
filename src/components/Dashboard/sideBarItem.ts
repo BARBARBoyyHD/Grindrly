@@ -8,6 +8,10 @@ export const sideBarItem: SideBarItemProps[] = [
     link: "/",
   },
   {
+    name: "Dashboard",
+    link: "/dashboard",
+  },
+  {
     name: "Workout",
     link: "/waitlist",
   },
