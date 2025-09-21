@@ -1,5 +1,4 @@
-// components/TimePicker.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface TimePickerProps {
   value?: string; // e.g. "02:30 PM"
@@ -19,35 +18,33 @@ function SelectBox<T extends string | number>({
 }: SelectBoxProps<T>) {
   return (
     <select
-  value={value}
-  onChange={(e) => onChange(e.target.value as T)}
-  className="
-    w-full px-3 py-2 rounded-xl 
-    bg-white/10 backdrop-blur-sm 
-    border border-white/20 
-    text-white placeholder-gray-300
-    shadow-sm shadow-black/20
-    transition-all duration-200 ease-in-out
-    focus:outline-none focus:ring-2 focus:ring-[#FE9A5D] focus:border-[#FE9A5D]
-    hover:bg-white/20
-  "
->
-  {options.map((opt) => (
-    <option
-      key={opt}
-      value={opt}
-      className="text-black bg-white hover:bg-gray-100"
+      value={value}
+      onChange={(e) => onChange(e.target.value as T)}
+      className="
+        w-full px-3 py-2 rounded-xl 
+        bg-white/10 backdrop-blur-sm 
+        border border-white/20 
+        text-white placeholder-gray-300
+        shadow-sm shadow-black/20
+        transition-all duration-200 ease-in-out
+        focus:outline-none focus:ring-2 focus:ring-[#FE9A5D] focus:border-[#FE9A5D]
+        hover:bg-white/20
+      "
     >
-      {typeof opt === "number" ? String(opt).padStart(2, "0") : opt}
-    </option>
-  ))}
-</select>
-
+      {options.map((opt) => (
+        <option
+          key={opt}
+          value={opt}
+          className="text-black bg-white hover:bg-gray-100"
+        >
+          {typeof opt === "number" ? String(opt).padStart(2, "0") : opt}
+        </option>
+      ))}
+    </select>
   );
 }
 
 export default function TimePicker({ value, onChange }: TimePickerProps) {
-  // Parse value into hour, minute, AM/PM
   const [hour, setHour] = useState(
     value ? parseInt(value.split(":")[0]) : 12
   );
@@ -69,6 +66,13 @@ export default function TimePicker({ value, onChange }: TimePickerProps) {
     )} ${p}`;
     onChange?.(formatted);
   };
+
+  // ✅ trigger initial update if no value
+  useEffect(() => {
+    if (!value) {
+      updateTime(hour, minute, period);
+    }
+  }, []); // run only once on mount
 
   return (
     <div className="flex gap-2 items-center">

@@ -12,7 +12,53 @@ export function useGetTask() {
         .from("tasks")
         .select("*")
         .eq("user_id", user_id);
-      console.log(data);
+      if (error) throw error;
+      return data ?? [];
+    },
+    enabled: !!user_id,
+  });
+}
+
+export function useGetSingleTask(task_id: string | null) {
+  const userId = useCurrentUser()?.id;
+
+  return useQuery({
+    queryKey: ["tasks", task_id, userId],
+    queryFn: async () => {
+      if (!task_id || !userId) return null;
+
+      const { data, error } = await supabase
+        .from("tasks")
+        .select("id,user_id,title,description,progress,is_complete,due_date,due_time")
+        .eq("id", task_id)
+        .eq("user_id", userId) // ✅ ensures task belongs to the current user
+        .single(); // ✅ directly get one row
+
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!task_id && !!userId, // ✅ only run when both exist
+  });
+}
+
+export function useGetTodaysTasks() {
+  const user_id = useCurrentUser()?.id;
+
+  return useQuery({
+    queryKey: ["tasks", user_id],
+    queryFn: async () => {
+      if (!user_id) return [];
+
+      // Get today's date in YYYY-MM-DD
+      const today = new Date().toISOString().split("T")[0];
+
+      const { data, error } = await supabase
+        .from("tasks")
+        .select("*")
+        .eq("user_id", user_id)
+        .eq("due_date", today) // since due_date is a date type
+        .order("due_date", { ascending: false });
+
       if (error) throw error;
       return data ?? [];
     },
@@ -28,7 +74,7 @@ export function useNewTask() {
       const { data, error } = await supabase
         .from("tasks")
         .insert([task])
-        .select();
+        .select("user_id,title,description,progress,is_complete,due_date,due_time");
       if (error) throw error;
       return data;
     },
@@ -38,11 +84,11 @@ export function useNewTask() {
   });
 }
 
-export function useDeleteTask(task_id: DeleteTask | null) {
+export function useDeleteTask() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async (task_id: DeleteTask | null) => {
       const { data, error } = await supabase
         .from("tasks")
         .delete()
@@ -56,36 +102,14 @@ export function useDeleteTask(task_id: DeleteTask | null) {
   });
 }
 
-export function useGetSingleTask(task_id: number | null) {
-  const userId = useCurrentUser()?.id;
-
-  return useQuery({
-    queryKey: ["task", task_id, userId],
-    queryFn: async () => {
-      if (!task_id || !userId) return null;
-
-      const { data, error } = await supabase
-        .from("tasks")
-        .select("*")
-        .eq("id", task_id)
-        .eq("user_id", userId) // ✅ ensures task belongs to the current user
-        .single(); // ✅ directly get one row
-
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!task_id && !!userId, // ✅ only run when both exist
-  });
-}
-
-export function useUpdateTask(task_id: number) {
+export function useUpdateTask() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (task: UpdateTask) => {
+    mutationFn: async ({id, ...task}: UpdateTask) => {
       const { data, error } = await supabase
         .from("tasks")
         .update(task)
-        .eq("id", task_id);
+        .eq("id", id);
       if (error) throw error;
       return data;
     },

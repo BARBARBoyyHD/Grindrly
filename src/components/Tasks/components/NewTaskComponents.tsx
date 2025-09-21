@@ -94,6 +94,7 @@ export default function NewTaskForm({ isOpen, onClose }: NewTaskFormProps) {
                   setFormTask({ ...formTask, dueDate: e.target.value })
                 }
                 required
+                min={new Date().toISOString().split("T")[0]}
                 className="p-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
               />
               {/* NEW: Progress select */}

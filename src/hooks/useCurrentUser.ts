@@ -13,7 +13,6 @@ export function useCurrentUser() {
         return data;
       }
     });
-
     // ✅ Subscribe to auth state changes
     const {
       data: { subscription },
