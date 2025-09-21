@@ -45,9 +45,7 @@ function SelectBox<T extends string | number>({
 }
 
 export default function TimePicker({ value, onChange }: TimePickerProps) {
-  const [hour, setHour] = useState(
-    value ? parseInt(value.split(":")[0]) : 12
-  );
+  const [hour, setHour] = useState(value ? parseInt(value.split(":")[0]) : 12);
   const [minute, setMinute] = useState(
     value ? parseInt(value.split(":")[1].split(" ")[0]) : 0
   );
