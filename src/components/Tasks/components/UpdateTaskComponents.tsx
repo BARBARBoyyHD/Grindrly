@@ -91,9 +91,21 @@ export default function UpdateTaskForm({
             <h2 className="text-xl font-semibold mb-4">Update Task</h2>
 
             {isLoading ? (
-              <p>Loading task...</p>
+              <motion.p
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+              >
+                Loading task...
+              </motion.p>
             ) : (
-              <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+              <motion.form
+                className="flex flex-col gap-4"
+                onSubmit={handleSubmit}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+              >
                 <input
                   type="text"
                   placeholder="Task title"
@@ -166,7 +178,7 @@ export default function UpdateTaskForm({
                     {updateTask.isPending ? "Updating..." : "Update Task"}
                   </button>
                 </div>
-              </form>
+              </motion.form>
             )}
           </motion.div>
         </motion.div>
