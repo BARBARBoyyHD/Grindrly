@@ -5,6 +5,7 @@ import TaskPages from "../pages/users/TaskPages";
 import WaitlistPages from "../pages/WaitlistPages";
 import SignUpPages from "../pages/Auth/SignUpPages";
 import Dashboards from "../pages/users/Dashboards";
+import WorkoutPages from "./users/WorkoutPages";
 
 export default {
   LoginPages,
@@ -14,4 +15,5 @@ export default {
   WaitlistPages,
   SignUpPages,
   Dashboards,
+  WorkoutPages,
 };

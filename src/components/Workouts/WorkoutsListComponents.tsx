@@ -1,10 +1,10 @@
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useGetTodaysTasks } from "../../hooks/useTask";
 import { formattedDate } from "../../lib/formatDate";
 import { formatTime } from "../../lib/timeFormat";
-import { motion } from "framer-motion";
 
-export default function TaskListUserComponents() {
+export default function WorkoutsListComponents() {
   const { data: taskList, isLoading } = useGetTodaysTasks();
 
   return (
@@ -16,7 +16,7 @@ export default function TaskListUserComponents() {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <h1 className="text-2xl sm:text-4xl text-white font-bold truncate">
-          Today's Tasks
+          Today's Workout
         </h1>
         <Link to={"/task"}>
           <p className="text-white font-bold">see more</p>
@@ -30,7 +30,7 @@ export default function TaskListUserComponents() {
           <div className="rounded-3xl text-center text-white font-bold ">
             No tasks for today ? Add Some !!!
           </div>
-          <Link to={"/task"} className="text-white hover:text-[#FE9A5D]">
+          <Link to={"/workout"} className="text-white hover:text-[#FE9A5D]">
             Add Your Task Here !!!
           </Link>
         </div>

@@ -28,6 +28,7 @@ function App() {
                 <Route path="/waitlist" element={<pages.WaitlistPages />} />
                 <Route path="/task" element={<pages.TaskPages />} />
                 <Route path="/dashboard" element={<pages.Dashboards />} />
+                <Route path="/workout" element={<pages.WorkoutPages />} />
               </Route>
 
               <Route path="*" element={<pages.NotFound />} />
