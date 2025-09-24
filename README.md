@@ -70,23 +70,22 @@ Build and run Grindrly locally:
    ```bash
    git clone https://github.com/BARBARBoyyHD/Grindrly
 2. **Navigate to the project directory**
+```basg
+  cd Grindrly
 
-cd Grindrly
 3. **Install dependencies**
-
-npm install
+```bash
+  npm install
 
 ▶️ Usage
-
-Run the project in development mode:
-
-npm start
+4. **Run the project in development mode:**
+```bash
+  npm start
 
 🧪 Testing
-
 Grindrly uses Jest (or your chosen test framework). Run the test suite with:
-
-npm test
+```bash
+  npm test
 
 
 👉 Question for you: do you want me to **add a "Contributing" and "License" section** too (like MIT License, PR guidelines, etc.), or should we keep it clean and simple like the screenshots you showed?
