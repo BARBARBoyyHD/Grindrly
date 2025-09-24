@@ -24,7 +24,7 @@ export const sideBarItem: SideBarItemProps[] = [
     link: "/waitlist",
   },
   {
-    name: "Supprot Us",
+    name: "Support Us",
     link: "/support",
   },
 ];
