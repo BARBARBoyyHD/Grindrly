@@ -68,25 +68,64 @@ Build and run Grindrly locally:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/BARBARBoyyHD/Grindrly
+     git clone https://github.com/BARBARBoyyHD/Grindrly
 2. **Navigate to the project directory**
-```basg
+
   cd Grindrly
 
 3. **Install dependencies**
-```bash
-  npm install
-
-▶️ Usage
+  ```bash
+    npm install
+  ```
 4. **Run the project in development mode:**
-```bash
-  npm start
+   ```bash
+      npm start
 
-🧪 Testing
 Grindrly uses Jest (or your chosen test framework). Run the test suite with:
-```bash
-  npm test
+  ```bash
+    npm test
+```
 
-
-👉 Question for you: do you want me to **add a "Contributing" and "License" section** too (like MIT License, PR guidelines, etc.), or should we keep it clean and simple like the screenshots you showed?
-
+## 📂 Project Structure
+```
+├── 📁 public # Public static assets (favicon, robots.txt, etc.)
+│
+├── 📁 src # Application source
+│ ├── 📁 assets # Static files (images, icons, etc.)
+│ ├── 📁 components # Reusable UI and feature components
+│ │ ├── 📁 Admin # Admin-related components
+│ │ ├── 📁 Auth # Authentication (login, register, etc.)
+│ │ ├── 📁 Dashboard # Dashboard components
+│ │ │ └── 📁 components # Nested dashboard UI elements
+│ │ ├── 📁 LandingPage # Landing page UI
+│ │ ├── 📁 Moods # Mood tracking features
+│ │ │ └── 📁 components # Subcomponents for moods
+│ │ ├── 📁 Tasks # Task management
+│ │ │ ├── 📁 button # Task-related buttons
+│ │ │ └── 📁 components # Task subcomponents
+│ │ ├── 📁 UI # Generic UI (buttons, inputs, modals, etc.)
+│ │ ├── 📁 Waitlist # Waitlist components
+│ │ └── 📁 Workouts # Workout tracking
+│ │ ├── 📁 button # Workout-related buttons
+│ │ └── 📁 components # Workout subcomponents
+│ │
+│ ├── 📁 config # Project configuration files
+│ ├── 📁 context # React context providers
+│ ├── 📁 hooks # Custom React hooks
+│ ├── 📁 lib # Utility libraries
+│ ├── 📁 pages # Page-level components (routes)
+│ │ ├── 📁 admin # Admin pages
+│ │ ├── 📁 Auth # Auth-related pages
+│ │ └── 📁 users # User-facing pages
+│ │
+│ ├── 📁 supabase # Supabase client & setup
+│ ├── 📁 types # TypeScript type definitions
+│ └── 📁 utils # Helper functions
+│
+├── 📄 package.json # Project metadata & dependencies
+├── 📄 tsconfig.json # TypeScript configuration
+├── 📄 tailwind.config.js # TailwindCSS configuration
+├── 📄 postcss.config.js # PostCSS configuration
+├── 📄 vite.config.ts # Vite build configuration
+└── 📄 README.md # Project documentation
+```
