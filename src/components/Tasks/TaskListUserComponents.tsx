@@ -46,7 +46,7 @@ export default function TaskListUserComponents() {
             key={task.id}
             className="bg-gradient-to-r from-[#FE9A5D] to-[#232224] 
            hover:from-[#232224] hover:to-[#FE9A5D] 
-           p-6 w-full h-[150px] rounded-[50px] 
+           p-6 w-[330px] h-[150px] rounded-[50px] 
            transition-all duration-500 hover:scale-100"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -61,7 +61,7 @@ export default function TaskListUserComponents() {
               </p>
             </div>
 
-            <h1 className="text-2xl font-bold truncate"> {task.title}</h1>
+            <h1 className="text-2xl font-bold truncate max-w-auto"> {task.title}</h1>
             <div className="flex justify-between items-center text-sm font-medium text-white/90 mt-6">
               <p>Progress: {task.progress}</p>
               <p

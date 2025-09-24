@@ -13,7 +13,7 @@ export const sideBarItem: SideBarItemProps[] = [
   },
   {
     name: "Workout",
-    link: "/waitlist",
+    link: "/workout",
   },
   {
     name: "Task",
@@ -22,5 +22,9 @@ export const sideBarItem: SideBarItemProps[] = [
   {
     name: "Mood",
     link: "/waitlist",
+  },
+  {
+    name: "Supprot Us",
+    link: "/support",
   },
 ];

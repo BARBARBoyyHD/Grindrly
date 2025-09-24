@@ -56,7 +56,7 @@ export default function WaitlistComponents() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: "easeOut", delay: 0.4 }}
       >
-        Update : Todo List is now available
+        Update : Todo and workout tracker is now available
       </motion.p>
       <motion.p
         className="text-white text-lg md:text-xl mb-8 px-2 max-w-2xl"
@@ -64,7 +64,7 @@ export default function WaitlistComponents() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: "easeOut", delay: 0.4 }}
       >
-        Upcoming : Workout Tracker & Mood will available soon
+        Upcoming : Mood daily tracker will available soon
       </motion.p>
 
       {/* Buttons */}
