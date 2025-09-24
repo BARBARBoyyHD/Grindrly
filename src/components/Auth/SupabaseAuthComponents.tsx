@@ -8,5 +8,5 @@ export default function SupabaseAuthComponents() {
   if (!session) {
     return <AuthUI />;
   }
-  return <Navigate to="/waitlist" replace />;
+  return <Navigate to="/dashboard" replace />;
 }

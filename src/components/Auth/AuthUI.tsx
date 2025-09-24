@@ -7,7 +7,7 @@ export default function AuthUI() {
         <div className="w-full max-w-sm p-6 bg-white rounded-2xl shadow-lg">
           <Auth
             supabaseClient={supabase}
-            redirectTo={`${window.location.origin}/waitlist`}
+            redirectTo={`${window.location.origin}/dashboard`}
             providers={["google"]}
             appearance={{
               theme: ThemeSupa,

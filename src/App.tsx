@@ -30,7 +30,7 @@ function App() {
                 <Route path="/dashboard" element={<pages.Dashboards />} />
                 <Route path="/workout" element={<pages.WorkoutPages />} />
               </Route>
-
+              <Route path="/support" element={<pages.Support />} />
               <Route path="*" element={<pages.NotFound />} />
             </Routes>
           )}

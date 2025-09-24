@@ -6,6 +6,7 @@ import WaitlistPages from "../pages/WaitlistPages";
 import SignUpPages from "../pages/Auth/SignUpPages";
 import Dashboards from "../pages/users/Dashboards";
 import WorkoutPages from "./users/WorkoutPages";
+import Support from "./users/SupportPages";
 
 export default {
   LoginPages,
@@ -16,4 +17,5 @@ export default {
   SignUpPages,
   Dashboards,
   WorkoutPages,
+  Support,
 };
