@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useCurrentUser } from "../../../hooks/useCurrentUser";
-import { useUpdateTask, useGetSingleTask } from "../../../hooks/useTask";
-import TimePicker from "../../UI/TimePicker";
+import { useGetSingleWorkout, useUpdateWorkout } from "@/hooks/useWorkouts";
+import type { EditWorkout } from "@/types/workouts";
 
 interface UpdateWorkoutFormProps {
   isOpen: boolean;
@@ -15,57 +15,60 @@ export default function UpdateWorkoutForm({
   onClose,
   id,
 }: UpdateWorkoutFormProps) {
-  const updateTask = useUpdateTask();
+  const updateWorkout = useUpdateWorkout();
   const user = useCurrentUser();
-  const { data: singleTask, isLoading } = useGetSingleTask(id);
+  const { data: singleWorkout, isLoading } = useGetSingleWorkout(id);
 
-  // ✅ local form state
-  const [formTask, setFormTask] = useState({
-    title: "",
-    description: "",
-    dueDate: "",
-    dueTime: "",
-    progress: "Not started",
+  // ✅ Local form state aligned with workouts type
+  const [formWorkout, setFormWorkout] = useState<Omit<EditWorkout, "id" | "user_id">>({
+    exercise: "",
+    sets: 0,
+    reps: 0,
+    weight: 0,
+    weight_unit: "kg",
+    is_complete: false,
   });
 
-  // ✅ Prefill form when singleTask is loaded
+  // ✅ Prefill form when singleWorkout is loaded
   useEffect(() => {
-    if (singleTask) {
-      setFormTask({
-        title: singleTask.title || "",
-        description: singleTask.description || "",
-        dueDate: singleTask.due_date
-          ? new Date(singleTask.due_date).toISOString().split("T")[0]
-          : "",
-        dueTime: singleTask.due_time || "",
-        progress: singleTask.progress || "Not started",
+    if (singleWorkout) {
+      setFormWorkout({
+        exercise: singleWorkout.exercise,
+        sets: singleWorkout.sets,
+        reps: singleWorkout.reps,
+        weight: singleWorkout.weight,
+        weight_unit: singleWorkout.weight_unit,
+        is_complete: singleWorkout.is_complete,
       });
     }
-  }, [singleTask]);
+  }, [singleWorkout]);
+
+  const handleChange = (
+    key: keyof typeof formWorkout,
+    value: string | number | boolean
+  ) => {
+    setFormWorkout((prev) => ({ ...prev, [key]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
 
-    updateTask.mutate(
+    updateWorkout.mutate(
       {
-        id: id,
+        id,
         user_id: user.id,
-        title: formTask.title,
-        description: formTask.description,
-        progress: formTask.progress,
-        is_complete: formTask.progress === "Completed",
-        due_date: new Date(formTask.dueDate), // already YYYY-MM-DD
-        due_time: formTask.dueTime,
+        ...formWorkout,
       },
       {
         onSuccess: () => {
-          setFormTask({
-            title: "",
-            description: "",
-            dueDate: "",
-            dueTime: "",
-            progress: "Not started",
+          setFormWorkout({
+            exercise: "",
+            sets: 0,
+            reps: 0,
+            weight: 0,
+            weight_unit: "kg",
+            is_complete: false,
           });
           onClose();
         },
@@ -106,61 +109,78 @@ export default function UpdateWorkoutForm({
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
               >
+                {/* Exercise */}
                 <input
                   type="text"
-                  placeholder="Task title"
-                  value={formTask.title}
-                  onChange={(e) =>
-                    setFormTask({ ...formTask, title: e.target.value })
-                  }
+                  placeholder="Exercise"
+                  value={formWorkout.exercise}
+                  onChange={(e) => handleChange("exercise", e.target.value)}
                   required
                   className="p-2 rounded-lg bg-white/20 border border-white/30 text-white"
                 />
 
-                <textarea
-                  placeholder="Task description"
-                  value={formTask.description}
-                  onChange={(e) =>
-                    setFormTask({ ...formTask, description: e.target.value })
-                  }
-                  className="p-2 rounded-lg bg-white/20 border border-white/30 text-white"
-                />
-
+                {/* Sets */}
                 <input
-                  type="date"
-                  value={formTask.dueDate}
-                  onChange={(e) =>
-                    setFormTask({ ...formTask, dueDate: e.target.value })
-                  }
+                  type="number"
+                  placeholder="Sets"
+                  value={formWorkout.sets}
+                  onChange={(e) => handleChange("sets", Number(e.target.value))}
                   required
-                  min={new Date().toISOString().split("T")[0]}
+                  min={1}
                   className="p-2 rounded-lg bg-white/20 border border-white/30 text-white"
                 />
 
-                <select
-                  value={formTask.progress}
-                  onChange={(e) =>
-                    setFormTask({ ...formTask, progress: e.target.value })
-                  }
+                {/* Reps */}
+                <input
+                  type="number"
+                  placeholder="Reps"
+                  value={formWorkout.reps}
+                  onChange={(e) => handleChange("reps", Number(e.target.value))}
+                  required
+                  min={1}
                   className="p-2 rounded-lg bg-white/20 border border-white/30 text-white"
-                >
-                  <option className="text-black" value="Not started">
-                    Not started
-                  </option>
-                  <option className="text-black" value="In progress">
-                    In progress
-                  </option>
-                  <option className="text-black" value="Completed">
-                    Completed
-                  </option>
-                </select>
-
-                <TimePicker
-                  value={formTask.dueTime}
-                  onChange={(time) =>
-                    setFormTask({ ...formTask, dueTime: time })
-                  }
                 />
+
+                {/* Weight */}
+                <div className="flex gap-2">
+                  <input
+                    type="number"
+                    placeholder="Weight"
+                    value={formWorkout.weight}
+                    onChange={(e) =>
+                      handleChange("weight", parseFloat(e.target.value))
+                    }
+                    required
+                    min={0}
+                    className="flex-1 p-2 rounded-lg bg-white/20 border border-white/30 text-white"
+                  />
+                  <select
+                    value={formWorkout.weight_unit}
+                    onChange={(e) =>
+                      handleChange("weight_unit", e.target.value as "kg" | "lbs")
+                    }
+                    className="p-2 rounded-lg bg-white/20 border border-white/30 text-white"
+                    required
+                  >
+                    <option className="text-black" value="kg">
+                      kg
+                    </option>
+                    <option className="text-black" value="lbs">
+                      lbs
+                    </option>
+                  </select>
+                </div>
+
+                {/* Completion toggle */}
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={formWorkout.is_complete}
+                    onChange={(e) => handleChange("is_complete", e.target.checked)}
+                    className="w-4 h-4"
+                  />
+                  Mark as completed
+                </label>
 
                 <div className="flex justify-end gap-2">
                   <button
@@ -172,10 +192,10 @@ export default function UpdateWorkoutForm({
                   </button>
                   <button
                     type="submit"
-                    disabled={updateTask.isPending}
+                    disabled={updateWorkout.isPending}
                     className="px-4 py-2 rounded-lg bg-[#FE9A5D] hover:bg-[#e07c3f] transition"
                   >
-                    {updateTask.isPending ? "Updating..." : "Update Task"}
+                    {updateWorkout.isPending ? "Updating..." : "Update Workout"}
                   </button>
                 </div>
               </motion.form>

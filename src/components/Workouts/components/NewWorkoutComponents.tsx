@@ -2,26 +2,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useNewWorkouts } from "@/hooks/useWorkouts";
 import { useCurrentUser } from "../../../hooks/useCurrentUser";
+import type { NewWorkout } from "@/types/workouts"; // ✅ use NewWorkout not Workouts
 
 interface NewWorkoutFormProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-type WorkoutFormState = {
-  exercise: string;
-  sets: number;
-  reps: number;
-  weight: number;
-  weight_unit: "kg" | "lbs";
-  is_complete: boolean;
-};
-
-export default function NewWorkoutForm({ isOpen, onClose }: NewWorkoutFormProps) {
+export default function NewWorkoutForm({
+  isOpen,
+  onClose,
+}: NewWorkoutFormProps) {
   const newWorkout = useNewWorkouts();
   const user = useCurrentUser();
 
-  const [formWorkout, setFormWorkout] = useState<WorkoutFormState>({
+  // ✅ Use NewWorkout type (no id, user_id handled separately)
+  const [formWorkout, setFormWorkout] = useState<Omit<NewWorkout, "user_id">>({
     exercise: "",
     sets: 0,
     reps: 0,
@@ -31,7 +27,7 @@ export default function NewWorkoutForm({ isOpen, onClose }: NewWorkoutFormProps)
   });
 
   const handleChange = (
-    key: keyof WorkoutFormState,
+    key: keyof typeof formWorkout,
     value: string | number | boolean
   ) => {
     setFormWorkout((prev) => ({ ...prev, [key]: value }));
@@ -43,13 +39,8 @@ export default function NewWorkoutForm({ isOpen, onClose }: NewWorkoutFormProps)
 
     newWorkout.mutate(
       {
-        user_id: user.id,
-        exercise: formWorkout.exercise,
-        sets: formWorkout.sets,
-        reps: formWorkout.reps,
-        weight: formWorkout.weight,
-        weight_unit: formWorkout.weight_unit,
-        is_complete: formWorkout.is_complete,
+        user_id: user.id, // ✅ add user_id from hook
+        ...formWorkout,
       },
       {
         onSuccess: () => {
@@ -122,19 +113,27 @@ export default function NewWorkoutForm({ isOpen, onClose }: NewWorkoutFormProps)
                   type="number"
                   placeholder="Weight"
                   value={formWorkout.weight}
-                  onChange={(e) => handleChange("weight", parseFloat(e.target.value))}
+                  onChange={(e) =>
+                    handleChange("weight", parseFloat(e.target.value))
+                  }
                   required
                   min={0}
                   className="flex-1 p-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
                 />
                 <select
                   value={formWorkout.weight_unit}
-                  onChange={(e) => handleChange("weight_unit", e.target.value as "kg" | "lbs")}
+                  onChange={(e) =>
+                    handleChange("weight_unit", e.target.value as "kg" | "lbs")
+                  }
                   className="p-2 rounded-lg bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
                   required
                 >
-                  <option className="text-black" value="kg">kg</option>
-                  <option className="text-black" value="lbs">lbs</option>
+                  <option className="text-black" value="kg">
+                    kg
+                  </option>
+                  <option className="text-black" value="lbs">
+                    lbs
+                  </option>
                 </select>
               </div>
 
@@ -143,7 +142,9 @@ export default function NewWorkoutForm({ isOpen, onClose }: NewWorkoutFormProps)
                 <input
                   type="checkbox"
                   checked={formWorkout.is_complete}
-                  onChange={(e) => handleChange("is_complete", e.target.checked)}
+                  onChange={(e) =>
+                    handleChange("is_complete", e.target.checked)
+                  }
                   className="w-4 h-4"
                 />
                 Mark as completed

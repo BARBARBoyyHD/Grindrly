@@ -1,11 +1,9 @@
+import { useGetWorkouts } from "@/hooks/useWorkouts";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useGetTodaysTasks } from "../../hooks/useTask";
-import { formattedDate } from "../../lib/formatDate";
-import { formatTime } from "../../lib/timeFormat";
 
 export default function WorkoutsListComponents() {
-  const { data: taskList, isLoading } = useGetTodaysTasks();
+  const { data: workoutList, isLoading } = useGetWorkouts();
 
   return (
     <section className="p-4">
@@ -18,20 +16,20 @@ export default function WorkoutsListComponents() {
         <h1 className="text-2xl sm:text-4xl text-white font-bold truncate">
           Today's Workout
         </h1>
-        <Link to={"/task"}>
+        <Link to={"/workout"}>
           <p className="text-white font-bold">see more</p>
         </Link>
       </motion.div>
       {isLoading && (
-        <p className="text-white font-bold text-center">Loading tasks...</p>
+        <p className="text-white font-bold text-center">Loading workouts...</p>
       )}
-      {taskList?.length === 0 && (
+      {workoutList?.length === 0 && (
         <div className="flex justify-center items-center flex-col border-2 border-[#FE9A5D] rounded-3xl w-full p-8 ">
           <div className="rounded-3xl text-center text-white font-bold ">
-            No tasks for today ? Add Some !!!
+            No workouts for today ? Add Some !!!
           </div>
           <Link to={"/workout"} className="text-white hover:text-[#FE9A5D]">
-            Add Your Task Here !!!
+            Add Your workout Here !!!
           </Link>
         </div>
       )}
@@ -41,36 +39,47 @@ export default function WorkoutsListComponents() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        {taskList?.slice(0, 4).map((task) => (
+        {workoutList?.slice(0, 4).map((workout) => (
           <motion.div
-            key={task.id}
+            key={workout.id}
             className="bg-gradient-to-r from-[#FE9A5D] to-[#232224] 
-           hover:from-[#232224] hover:to-[#FE9A5D] 
-           p-6 w-[330px] h-[150px] rounded-[50px] 
-           transition-all duration-500 hover:scale-100"
+                          hover:from-[#232224] hover:to-[#FE9A5D] 
+                          w-full sm:w-1/2 lg:w-1/4
+                          p-6 rounded-[50px] shadow-lg transition-transform duration-300 hover:scale-105 flex flex-col justify-between"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="flex items-center justify-between ">
-              <p className="font-bold text-sm truncate">
-                {formatTime(task.due_time)}
+            {/* Title */}
+            <h2 className="text-xl sm:text-2xl font-bold text-white truncate mb-2">
+              {workout.exercise}
+            </h2>
+
+            {/* Details */}
+            <div className="text-white/90 text-sm mb-4">
+              <p>
+                <span className="font-semibold">Sets:</span> {workout.sets}
               </p>
-              <p className="font-bold text-sm truncate">
-                {formattedDate(task.due_date)}
+              <p>
+                <span className="font-semibold">Reps:</span> {workout.reps}
+              </p>
+              <p>
+                <span className="font-semibold">Weight:</span> {workout.weight}{" "}
+                {workout.weight_unit}
               </p>
             </div>
 
-            <h1 className="text-2xl font-bold truncate max-w-auto"> {task.title}</h1>
-            <div className="flex justify-between items-center text-sm font-medium text-white/90 mt-6">
-              <p>Progress: {task.progress}</p>
+            {/* Footer */}
+            <div className="flex justify-between items-center text-sm font-medium text-white/90">
               <p
                 className={`${
-                  task.is_complete ? "text-green-400" : "text-yellow-400"
+                  workout.is_complete ? "text-green-400" : "text-yellow-400"
                 }`}
               >
-                {task.is_complete ? "Completed" : "Not Completed"}
+                {workout.is_complete ? "Completed" : "Not Completed"}
               </p>
+
+              
             </div>
           </motion.div>
         ))}
