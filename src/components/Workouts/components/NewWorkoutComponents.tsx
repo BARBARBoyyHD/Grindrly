@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useNewWorkouts } from "@/hooks/useWorkouts";
 import { useCurrentUser } from "../../../hooks/useCurrentUser";
-import type { NewWorkout } from "@/types/workouts"; // ✅ use NewWorkout not Workouts
+import type { NewWorkout } from "@/types/workouts";
 
 interface NewWorkoutFormProps {
   isOpen: boolean;
@@ -16,12 +16,11 @@ export default function NewWorkoutForm({
   const newWorkout = useNewWorkouts();
   const user = useCurrentUser();
 
-  // ✅ Use NewWorkout type (no id, user_id handled separately)
   const [formWorkout, setFormWorkout] = useState<Omit<NewWorkout, "user_id">>({
     exercise: "",
-    sets: 0,
-    reps: 0,
-    weight: 0,
+    sets: undefined as unknown as number,
+    reps: undefined as unknown as number,
+    weight: undefined as unknown as number,
     weight_unit: "kg",
     is_complete: false,
   });
@@ -33,22 +32,40 @@ export default function NewWorkoutForm({
     setFormWorkout((prev) => ({ ...prev, [key]: value }));
   };
 
+  // ✅ Universal number handler
+  const handleNumericChange = (
+    key: "sets" | "reps" | "weight",
+    raw: string,
+    allowDecimal = false
+  ) => {
+    if (raw === "") {
+      handleChange(key, undefined as unknown as number);
+      return;
+    }
+
+    const regex = allowDecimal ? /^\d*\.?\d*$/ : /^\d+$/;
+    if (regex.test(raw)) {
+      const num = allowDecimal ? parseFloat(raw) : Number(raw);
+      handleChange(key, num);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
 
     newWorkout.mutate(
       {
-        user_id: user.id, // ✅ add user_id from hook
+        user_id: user.id,
         ...formWorkout,
       },
       {
         onSuccess: () => {
           setFormWorkout({
             exercise: "",
-            sets: 0,
-            reps: 0,
-            weight: 0,
+            sets: undefined as unknown as number,
+            reps: undefined as unknown as number,
+            weight: undefined as unknown as number,
             weight_unit: "kg",
             is_complete: false,
           });
@@ -82,50 +99,61 @@ export default function NewWorkoutForm({
                 value={formWorkout.exercise}
                 onChange={(e) => handleChange("exercise", e.target.value)}
                 required
-                className="p-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
+                className="p-3 rounded-lg bg-white/20 border border-white/30 
+                  text-white placeholder-gray-300 
+                  focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
               />
 
               {/* Sets */}
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 placeholder="Sets"
-                value={formWorkout.sets}
-                onChange={(e) => handleChange("sets", Number(e.target.value))}
+                value={formWorkout.sets ?? ""}
+                onChange={(e) => handleNumericChange("sets", e.target.value)}
                 required
-                min={1}
-                className="p-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
+                className="p-3 rounded-lg bg-white/20 border border-white/30 
+                  text-white placeholder-gray-300 
+                  focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
               />
 
               {/* Reps */}
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 placeholder="Reps"
-                value={formWorkout.reps}
-                onChange={(e) => handleChange("reps", Number(e.target.value))}
+                value={formWorkout.reps ?? ""}
+                onChange={(e) => handleNumericChange("reps", e.target.value)}
                 required
-                min={1}
-                className="p-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
+                className="p-3 rounded-lg bg-white/20 border border-white/30 
+                  text-white placeholder-gray-300 
+                  focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
               />
 
               {/* Weight */}
               <div className="flex gap-2">
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="decimal"
                   placeholder="Weight"
-                  value={formWorkout.weight}
+                  value={formWorkout.weight ?? ""}
                   onChange={(e) =>
-                    handleChange("weight", parseFloat(e.target.value))
+                    handleNumericChange("weight", e.target.value, true)
                   }
                   required
-                  min={0}
-                  className="flex-1 p-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
+                  className="flex-1 p-3 rounded-lg bg-white/20 border border-white/30 
+                    text-white placeholder-gray-300 
+                    focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
                 />
                 <select
                   value={formWorkout.weight_unit}
                   onChange={(e) =>
                     handleChange("weight_unit", e.target.value as "kg" | "lbs")
                   }
-                  className="p-2 rounded-lg bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
+                  className="p-3 rounded-lg bg-white/20 border border-white/30 
+                    text-white focus:outline-none focus:ring-2 focus:ring-[#FE9A5D]"
                   required
                 >
                   <option className="text-black" value="kg">
